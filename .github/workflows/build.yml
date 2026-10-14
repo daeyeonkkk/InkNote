@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: 핵심 로직 테스트 (PDFium 저장/불러오기)
+        run: dotnet test tests/InkNote.Core.Tests -c Release
+
+      - name: 앱 빌드 (x64, 설치 없이 실행되는 폴더)
+        run: dotnet publish src/InkNote.App -c Release -r win-x64 --self-contained -p:Platform=x64 -o publish/InkNote-win-x64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: InkNote-win-x64
+          path: publish/InkNote-win-x64

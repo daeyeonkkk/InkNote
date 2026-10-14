@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- UI와 무관한 핵심: PDFium 연동, 필기 모델, PDF 주석 저장/불러오기.
+       Windows 앱과 Linux 테스트가 함께 씁니다. pdfium 네이티브 라이브러리는 쓰는 쪽 프로젝트가 넣습니다. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="InkNote.Core.Tests" />
+  </ItemGroup>
+
+</Project>

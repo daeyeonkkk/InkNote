@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="InkNote.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="InkNote">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="Root" AllowDrop="True" DragOver="Root_DragOver" Drop="Root_Drop">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <CommandBar x:Name="Toolbar" Grid.Row="0" HorizontalAlignment="Left" Background="Transparent"
+                    DefaultLabelPosition="Right" IsDynamicOverflowEnabled="True">
+            <AppBarButton Label="열기" Click="Open_Click" ToolTipService.ToolTip="PDF 열기 (Ctrl+O)">
+                <AppBarButton.Icon><FontIcon Glyph="&#xE8E5;" /></AppBarButton.Icon>
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="O" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
+            <AppBarButton x:Name="SaveButton" Label="저장" Click="Save_Click" IsEnabled="False" ToolTipService.ToolTip="저장 (Ctrl+S)">
+                <AppBarButton.Icon><FontIcon Glyph="&#xE74E;" /></AppBarButton.Icon>
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="S" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
+            <AppBarButton x:Name="SaveAsButton" Label="다른 이름으로" Click="SaveAs_Click" IsEnabled="False" ToolTipService.ToolTip="다른 이름으로 저장 (Ctrl+Shift+S)">
+                <AppBarButton.Icon><FontIcon Glyph="&#xE792;" /></AppBarButton.Icon>
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control,Shift" Key="S" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
+
+            <AppBarSeparator />
+
+            <AppBarToggleButton x:Name="PenButton" Label="펜" IsChecked="True" Click="Tool_Click" Tag="Pen" ToolTipService.ToolTip="펜 (P)">
+                <AppBarToggleButton.Icon><FontIcon Glyph="&#xE76D;" /></AppBarToggleButton.Icon>
+                <AppBarToggleButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="P" />
+                </AppBarToggleButton.KeyboardAccelerators>
+            </AppBarToggleButton>
+            <AppBarToggleButton x:Name="HighlighterButton" Label="형광펜" Click="Tool_Click" Tag="Highlighter" ToolTipService.ToolTip="형광펜 (H)">
+                <AppBarToggleButton.Icon><FontIcon Glyph="&#xE7E6;" /></AppBarToggleButton.Icon>
+                <AppBarToggleButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="H" />
+                </AppBarToggleButton.KeyboardAccelerators>
+            </AppBarToggleButton>
+            <AppBarToggleButton x:Name="EraserButton" Label="지우개" Click="Tool_Click" Tag="Eraser" ToolTipService.ToolTip="획 지우개 (E) · 펜 뒤쪽이나 옆 버튼으로도 지워집니다">
+                <AppBarToggleButton.Icon><FontIcon Glyph="&#xE75C;" /></AppBarToggleButton.Icon>
+                <AppBarToggleButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Key="E" />
+                </AppBarToggleButton.KeyboardAccelerators>
+            </AppBarToggleButton>
+
+            <AppBarElementContainer VerticalContentAlignment="Center">
+                <StackPanel x:Name="Swatches" Orientation="Horizontal" Spacing="6" Margin="8,0" />
+            </AppBarElementContainer>
+            <AppBarElementContainer VerticalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6" Margin="4,0,8,0">
+                    <TextBlock Text="굵기" VerticalAlignment="Center" />
+                    <Slider x:Name="WidthSlider" Width="110" Minimum="1" Maximum="5" StepFrequency="1"
+                            TickFrequency="1" TickPlacement="Inline" SnapsTo="Ticks" VerticalAlignment="Center"
+                            ValueChanged="WidthSlider_ValueChanged" />
+                </StackPanel>
+            </AppBarElementContainer>
+
+            <AppBarSeparator />
+
+            <AppBarButton x:Name="UndoButton" Label="실행 취소" Click="Undo_Click" IsEnabled="False" ToolTipService.ToolTip="실행 취소 (Ctrl+Z)">
+                <AppBarButton.Icon><FontIcon Glyph="&#xE7A7;" /></AppBarButton.Icon>
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="Z" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
+            <AppBarButton x:Name="RedoButton" Label="다시 실행" Click="Redo_Click" IsEnabled="False" ToolTipService.ToolTip="다시 실행 (Ctrl+Y)">
+                <AppBarButton.Icon><FontIcon Glyph="&#xE7A6;" /></AppBarButton.Icon>
+                <AppBarButton.KeyboardAccelerators>
+                    <KeyboardAccelerator Modifiers="Control" Key="Y" />
+                </AppBarButton.KeyboardAccelerators>
+            </AppBarButton>
+
+            <CommandBar.Content>
+                <TextBlock x:Name="StatusText" Margin="12,14,12,0" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </CommandBar.Content>
+        </CommandBar>
+
+        <ScrollViewer x:Name="Scroller" Grid.Row="1" ZoomMode="Enabled" MinZoomFactor="0.25" MaxZoomFactor="5"
+                      HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto"
+                      Background="{ThemeResource LayerOnMicaBaseAltFillColorSecondaryBrush}"
+                      ViewChanged="Scroller_ViewChanged" SizeChanged="Scroller_SizeChanged"
+                      PointerExited="Scroller_PointerExited">
+            <StackPanel x:Name="PagesPanel" Spacing="16" Padding="24" HorizontalAlignment="Center" />
+        </ScrollViewer>
+
+        <StackPanel x:Name="EmptyHint" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+            <TextBlock Text="PDF를 열어 필기를 시작하세요" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center" />
+            <TextBlock Text="Ctrl+O 또는 파일을 이 창으로 끌어다 놓기" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</Window>
