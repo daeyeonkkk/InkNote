@@ -32,6 +32,13 @@
     <PackageReference Include="bblanchon.PDFium.Win32" Version="157.0.8100" />
   </ItemGroup>
 
+  <!-- 배포 폴더에 라이선스 고지를 함께 넣습니다 -->
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\THIRD_PARTY_NOTICES.md" Link="THIRD_PARTY_NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\third_party\pdfium\licenses\**" Link="licenses\pdfium\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\InkNote.Core\InkNote.Core.csproj" />
   </ItemGroup>

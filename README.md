@@ -65,3 +65,8 @@ tests/InkNote.Core.Tests 저장→다시 열기 왕복, 회전된 페이지, 형
 - 지우개는 획 단위만(부분 지우기 없음), 올가미 선택·이동 없음, 빈 페이지 추가 없음
 - 아주 크게 확대하면(캔버스 4096px 상한) 조금 흐려질 수 있음
 - 암호 걸린 PDF 미지원
+
+## 라이선스
+
+[MIT](LICENSE). 함께 쓰는 PDFium, Windows App SDK, Win2D 등의 라이선스는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)에 있고,
+빌드한 실행 폴더에도 `LICENSE.txt`, `THIRD_PARTY_NOTICES.md`, `licenses\pdfium\`가 함께 들어갑니다.
